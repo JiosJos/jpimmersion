@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Japanese Learning Hub</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .container {
+            display: flex;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+            gap: 20px;
+        }
+        
+        .column {
+            flex: 1;
+            background-color: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .column-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .column-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .shuffle-btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+        
+        .shuffle-btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .link-btn {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 10px 15px;
+            margin-bottom: 8px;
+            background-color: #f8f8f8;
+            border: 1px solid #eee;
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: left;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+        
+        .link-btn:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .remove-btn {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .remove-btn:hover {
+            background-color: #c0392b;
+        }
+        
+        .add-btn {
+            width: 100%;
+            padding: 10px;
+            margin-top: 15px;
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .add-btn:hover {
+            background-color: #27ae60;
+        }
+        
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .random-all {
+            background-color: #9b59b6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .random-all:hover {
+            background-color: #8e44ad;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            width: 400px;
+            max-width: 90%;
+        }
+        
+        .modal-title {
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        
+        .button-group {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .save-btn, .cancel-btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .save-btn {
+            background-color: #2ecc71;
+            color: white;
+        }
+        
+        .cancel-btn {
+            background-color: #e74c3c;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <h1>Japanese Learning Hub</h1>
+        <button class="random-all" id="randomAll">Random (Any)</button>
+    </div>
+    
+    <div class="container">
+        <div class="column" id="tvChannels">
+            <div class="column-header">
+                <div class="column-title">TV Channels</div>
+                <button class="shuffle-btn" onclick="shuffleColumn('tvChannels')">🔄</button>
+            </div>
+            <div class="links-container">
+                <!-- Links will be added here -->
+            </div>
+            <button class="add-btn" onclick="showAddModal('tvChannels')">+ Add Channel</button>
+        </div>
+        
+        <div class="column" id="videos">
+            <div class="column-header">
+                <div class="column-title">Videos</div>
+                <button class="shuffle-btn" onclick="shuffleColumn('videos')">🔄</button>
+            </div>
+            <div class="links-container">
+                <!-- Links will be added here -->
+            </div>
+            <button class="add-btn" onclick="showAddModal('videos')">+ Add Video</button>
+        </div>
+        
+        <div class="column" id="playlists">
+            <div class="column-header">
+                <div class="column-title">Playlists</div>
+                <button class="shuffle-btn" onclick="shuffleColumn('playlists')">🔄</button>
+            </div>
+            <div class="links-container">
+                <!-- Links will be added here -->
+            </div>
+            <button class="add-btn" onclick="showAddModal('playlists')">+ Add Playlist</button>
+        </div>
+    </div>
+    
+    <!-- Add Link Modal -->
+    <div class="modal" id="addModal">
+        <div class="modal-content">
+            <h3 class="modal-title" id="modalTitle">Add New Link</h3>
+            <div class="form-group">
+                <label for="linkTitle">Title:</label>
+                <input type="text" id="linkTitle" placeholder="Enter title">
+            </div>
+            <div class="form-group">
+                <label for="linkUrl">URL:</label>
+                <input type="text" id="linkUrl" placeholder="https://...">
+            </div>
+            <div class="button-group">
+                <button class="cancel-btn" onclick="closeModal()">Cancel</button>
+                <button class="save-btn" onclick="addLink()">Add</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Store the current category being edited
+        let currentCategory = '';
+        
+        // Initialize with sample data or load from localStorage
+        document.addEventListener('DOMContentLoaded', () => {
+            // Default links if nothing in localStorage
+            const defaultLinks = {
+                tvChannels: [
+                    { title: "NHK News", url: "https://www3.nhk.or.jp/nhkworld/en/live/" },
+                    { title: "TV Tokyo", url: "https://www.tv-tokyo.co.jp/" },
+                    { title: "AbemaTV", url: "https://abema.tv/" },
+                    { title: "TVer", url: "https://tver.jp/" }
+                ],
+                videos: [
+                    { title: "Japanese Listening Practice", url: "https://www.youtube.com/watch?v=7-ZEczS9NXk" },
+                    { title: "Basic Greetings", url: "https://www.youtube.com/watch?v=qIWj8Ihj9P4" },
+                    { title: "Hiragana Tutorial", url: "https://www.youtube.com/watch?v=6p9Il_j0zjc" },
+                    { title: "Useful Expressions", url: "https://www.youtube.com/watch?v=MKfAeizH0Tc" },
+                    { title: "Cooking Vocabulary", url: "https://www.youtube.com/watch?v=Mw5mAozjC6M" }
+                ],
+                playlists: [
+                    { title: "Japanese From Zero", url: "https://www.youtube.com/playlist?list=PLOcym2c7xnBwU12Eh8bJX3O6EbEVgK9Is" },
+                    { title: "Genki Textbook", url: "https://www.youtube.com/playlist?list=PLA_RcUI8km1NMhiVTZ8xiXFeQqnz_a-4F" },
+                    { title: "JLPT N5 Complete Course", url: "https://www.youtube.com/playlist?list=PLd5-Wp_4tLqYZxS5j3g6kbeOfVXlTkr3N" }
+                ]
+            };
+            
+            // Load data from localStorage or use defaults
+            let storedData = localStorage.getItem('japaneseHubLinks');
+            const links = storedData ? JSON.parse(storedData) : defaultLinks;
+            
+            // Render links for each category
+            renderLinks('tvChannels', links.tvChannels);
+            renderLinks('videos', links.videos);
+            renderLinks('playlists', links.playlists);
+            
+            // Add event listener for the random button
+            document.getElementById('randomAll').addEventListener('click', openRandomLink);
+        });
+        
+        // Render links for a specific category
+        function renderLinks(category, links) {
+            const container = document.querySelector(`#${category} .links-container`);
+            container.innerHTML = '';
+            
+            links.forEach((link, index) => {
+                const linkBtn = document.createElement('button');
+                linkBtn.className = 'link-btn';
+                linkBtn.innerHTML = `
+                    ${link.title}
+                    <span class="remove-btn" onclick="removeLink('${category}', ${index})">✕</span>
+                `;
+                linkBtn.addEventListener('click', (e) => {
+                    // Only open the link if the remove button wasn't clicked
+                    if (!e.target.classList.contains('remove-btn')) {
+                        window.open(link.url, '_blank');
+                    }
+                });
+                container.appendChild(linkBtn);
+            });
+            
+            // Save to localStorage
+            saveLinks();
+        }
+        
+        // Get all links data
+        function getAllLinks() {
+            return {
+                tvChannels: getLinksForCategory('tvChannels'),
+                videos: getLinksForCategory('videos'),
+                playlists: getLinksForCategory('playlists')
+            };
+        }
+        
+        // Get links for a specific category
+        function getLinksForCategory(category) {
+            const links = [];
+            const buttons = document.querySelectorAll(`#${category} .link-btn`);
+            
+            buttons.forEach((btn, index) => {
+                // Extract title (text content without the "✕" from the remove button)
+                const title = btn.textContent.trim().replace('✕', '').trim();
+                
+                // Get URL from our data structure
+                const allLinks = JSON.parse(localStorage.getItem('japaneseHubLinks'));
+                const url = allLinks[category][index].url;
+                
+                links.push({ title, url });
+            });
+            
+            return links;
+        }
+        
+        // Save links to localStorage
+        function saveLinks() {
+            const links = getAllLinks();
+            localStorage.setItem('japaneseHubLinks', JSON.stringify(links));
+        }
+        
+        // Show the add link modal
+        function showAddModal(category) {
+            currentCategory = category;
+            const modal = document.getElementById('addModal');
+            const title = document.getElementById('modalTitle');
+            
+            // Set the modal title based on category
+            if (category === 'tvChannels') {
+                title.textContent = 'Add New TV Channel';
+            } else if (category === 'videos') {
+                title.textContent = 'Add New Video';
+            } else {
+                title.textContent = 'Add New Playlist';
+            }
+            
+            // Clear previous values
+            document.getElementById('linkTitle').value = '';
+            document.getElementById('linkUrl').value = '';
+            
+            // Show the modal
+            modal.style.display = 'flex';
+        }
+        
+        // Close the modal
+        function closeModal() {
+            document.getElementById('addModal').style.display = 'none';
+        }
+        
+        // Add a new link
+        function addLink() {
+            const title = document.getElementById('linkTitle').value.trim();
+            const url = document.getElementById('linkUrl').value.trim();
+            
+            if (title && url) {
+                // Get current links
+                const allLinks = JSON.parse(localStorage.getItem('japaneseHubLinks')) || {
+                    tvChannels: [],
+                    videos: [],
+                    playlists: []
+                };
+                
+                // Add new link
+                allLinks[currentCategory].push({ title, url });
+                
+                // Save and render
+                localStorage.setItem('japaneseHubLinks', JSON.stringify(allLinks));
+                renderLinks(currentCategory, allLinks[currentCategory]);
+                
+                // Close the modal
+                closeModal();
+            } else {
+                alert('Please enter both title and URL');
+            }
+        }
+        
+        // Remove a link
+        function removeLink(category, index) {
+            event.stopPropagation(); // Prevent the link from opening
+            
+            // Get current links
+            const allLinks = JSON.parse(localStorage.getItem('japaneseHubLinks'));
+            
+            // Remove the specified link
+            allLinks[category].splice(index, 1);
+            
+            // Save and render
+            localStorage.setItem('japaneseHubLinks', JSON.stringify(allLinks));
+            renderLinks(category, allLinks[category]);
+        }
+        
+        // Shuffle links in a column
+        function shuffleColumn(category) {
+            // Get current links for the category
+            const allLinks = JSON.parse(localStorage.getItem('japaneseHubLinks'));
+            const links = [...allLinks[category]];
+            
+            if (links.length > 0) {
+                // Select a random link
+                const randomIndex = Math.floor(Math.random() * links.length);
+                const randomLink = links[randomIndex];
+                
+                // Open the random link
+                window.open(randomLink.url, '_blank');
+            }
+        }
+        
+        // Open a random link from any category
+        function openRandomLink() {
+            const allLinks = JSON.parse(localStorage.getItem('japaneseHubLinks'));
+            
+            // Combine all links into one array
+            const allLinksArray = [
+                ...allLinks.tvChannels,
+                ...allLinks.videos,
+                ...allLinks.playlists
+            ];
+            
+            if (allLinksArray.length > 0) {
+                // Select a random link
+                const randomIndex = Math.floor(Math.random() * allLinksArray.length);
+                const randomLink = allLinksArray[randomIndex];
+                
+                // Open the random link
+                window.open(randomLink.url, '_blank');
+            }
+        }
+    </script>
+</body>
+</html>
